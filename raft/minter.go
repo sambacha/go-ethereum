@@ -259,6 +259,7 @@ func (minter *minter) getTransactions() *types.TransactionsByPriceAndNonce {
 		panic(err)
 	}
 	addrTxes := minter.speculativeChain.withoutProposedTxes(allAddrTxes)
+	log.Info("Mark raft getTransactions()", "txs", len(addrTxes))
 	return types.NewTransactionsByPriceAndNonce(addrTxes)
 }
 
