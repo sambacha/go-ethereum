@@ -582,5 +582,10 @@ func (env *Work) commitTransaction(tx *types.Transaction, bc *core.BlockChain, c
 	env.txs = append(env.txs, tx)
 	env.receipts = append(env.receipts, receipt, privateReceipt)
 
-	return nil, receipt.Logs
+	logs := receipt.Logs
+	if privateReceipt != nil {
+		logs = append(receipt.Logs, privateReceipt.Logs...)
+		log.Debug("private receipt", "receipt", privateReceipt)
+	}
+	return nil, logs
 }
