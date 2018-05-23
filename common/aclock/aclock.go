@@ -1,18 +1,22 @@
 package aclock
 
 import (
+	"fmt"
 	"time"
 )
 
 var offset time.Duration
 
-func init() {
-	offset = 24 * time.Hour
+func AdvanceTime(d time.Duration) (time.Duration, error) {
+	if offset+d < offset {
+		return 0, fmt.Errorf("aclock: offset overflow")
+	}
+	offset += d
+	return offset, nil
 }
 
-func AdvanceTime(d time.Duration) time.Duration {
-	offset += d
-	return offset
+func NowWithOffset() (time.Time, time.Duration) {
+	return time.Now().Add(offset), offset
 }
 
 func Reset() {
@@ -21,8 +25,4 @@ func Reset() {
 
 func Now() time.Time {
 	return time.Now().Add(offset)
-}
-
-func Since(t time.Time) time.Duration {
-	return Now().Sub(t)
 }

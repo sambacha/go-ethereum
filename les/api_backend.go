@@ -19,9 +19,11 @@ package les
 import (
 	"context"
 	"math/big"
+	"time"
 
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/aclock"
 	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/bloombits"
@@ -54,6 +56,14 @@ func (b *LesApiBackend) CurrentBlock() *types.Block {
 func (b *LesApiBackend) SetHead(number uint64) {
 	b.eth.protocolManager.downloader.Cancel()
 	b.eth.blockchain.SetHead(number)
+}
+
+func (b *LesApiBackend) AdvanceTime(seconds uint64) (uint64, error) {
+	offset, err := aclock.AdvanceTime(time.Duration(seconds) * time.Second)
+	if err != nil {
+		return 0, err
+	}
+	return uint64(offset.Seconds()), nil
 }
 
 func (b *LesApiBackend) HeaderByNumber(ctx context.Context, blockNr rpc.BlockNumber) (*types.Header, error) {

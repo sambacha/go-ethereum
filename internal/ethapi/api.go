@@ -1453,6 +1453,12 @@ func (api *PrivateDebugAPI) SetHead(number hexutil.Uint64) {
 	api.b.SetHead(uint64(number))
 }
 
+// AdvanceTime advances the time for the clock used in consensus and mining. It
+// has the effect of changing the timestamp of the next mined block.
+func (api *PrivateDebugAPI) AdvanceTime(seconds uint64) {
+	api.b.AdvanceTime(seconds)
+}
+
 // PublicNetAPI offers network related RPC methods
 type PublicNetAPI struct {
 	net            *p2p.Server

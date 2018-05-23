@@ -396,16 +396,21 @@ func (self *worker) commitNewWork() {
 	self.currentMu.Lock()
 	defer self.currentMu.Unlock()
 
-	tstart := aclock.Now()
+	tstart, startOffset := aclock.NowWithOffset()
 	parent := self.chain.CurrentBlock()
 
 	tstamp := tstart.Unix()
 	if parent.Time().Cmp(new(big.Int).SetInt64(tstamp)) >= 0 {
 		tstamp = parent.Time().Int64() + 1
 	}
+
 	// this will ensure we're not going off too far in the future
-	if now := aclock.Now().Unix(); tstamp > now+1 {
-		wait := time.Duration(tstamp-now) * time.Second
+	now, nowOffset := aclock.NowWithOffset()
+	// nowWithOffset accounts for differences between the current aclock offset
+	// the offset when the current block was mined.
+	nowWithOffset := now.Unix() + int64(nowOffset.Seconds()-startOffset.Seconds())
+	if tstamp > nowWithOffset+1 {
+		wait := time.Duration(tstamp-nowWithOffset) * time.Second
 		log.Info("Mining too far in the future", "wait", common.PrettyDuration(wait))
 		time.Sleep(wait)
 	}
