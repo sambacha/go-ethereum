@@ -25,6 +25,7 @@ import (
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/aclock"
 	"github.com/ethereum/go-ethereum/consensus"
 	"github.com/ethereum/go-ethereum/consensus/misc"
 	"github.com/ethereum/go-ethereum/core"
@@ -395,7 +396,7 @@ func (self *worker) commitNewWork() {
 	self.currentMu.Lock()
 	defer self.currentMu.Unlock()
 
-	tstart := time.Now()
+	tstart := aclock.Now()
 	parent := self.chain.CurrentBlock()
 
 	tstamp := tstart.Unix()
@@ -403,7 +404,7 @@ func (self *worker) commitNewWork() {
 		tstamp = parent.Time().Int64() + 1
 	}
 	// this will ensure we're not going off too far in the future
-	if now := time.Now().Unix(); tstamp > now+1 {
+	if now := aclock.Now().Unix(); tstamp > now+1 {
 		wait := time.Duration(tstamp-now) * time.Second
 		log.Info("Mining too far in the future", "wait", common.PrettyDuration(wait))
 		time.Sleep(wait)
