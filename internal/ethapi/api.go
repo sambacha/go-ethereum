@@ -1457,7 +1457,7 @@ func (api *PrivateDebugAPI) SetHead(number hexutil.Uint64) {
 // IncreaseTime increase the time offset for the clock used in consensus and
 // mining. It has the effect of changing the timestamp of the next mined block.
 func (api *PrivateDebugAPI) IncreaseTime(seconds uint64) (uint64, error) {
-	offset, err := aclock.AddTimeOffset(time.Duration(seconds) * time.Second)
+	offset, err := aclock.AddOffset(time.Duration(seconds) * time.Second)
 	if err != nil {
 		return 0, err
 	}
