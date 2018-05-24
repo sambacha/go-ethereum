@@ -29,6 +29,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/aclock"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/consensus/ethash"
@@ -1455,8 +1456,13 @@ func (api *PrivateDebugAPI) SetHead(number hexutil.Uint64) {
 
 // AdvanceTime advances the time for the clock used in consensus and mining. It
 // has the effect of changing the timestamp of the next mined block.
-func (api *PrivateDebugAPI) AdvanceTime(seconds uint64) {
-	api.b.AdvanceTime(seconds)
+func (api *PrivateDebugAPI) AdvanceTime(seconds uint64) (uint64, error) {
+	fmt.Printf("AdvanceTime called: %d\n", seconds)
+	offset, err := aclock.AdvanceTime(time.Duration(seconds) * time.Second)
+	if err != nil {
+		return 0, err
+	}
+	return uint64(offset.Seconds()), nil
 }
 
 // PublicNetAPI offers network related RPC methods

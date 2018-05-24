@@ -47,7 +47,6 @@ type Backend interface {
 
 	// BlockChain API
 	SetHead(number uint64)
-	AdvanceTime(number uint64) (uint64, error)
 	HeaderByNumber(ctx context.Context, blockNr rpc.BlockNumber) (*types.Header, error)
 	BlockByNumber(ctx context.Context, blockNr rpc.BlockNumber) (*types.Block, error)
 	StateAndHeaderByNumber(ctx context.Context, blockNr rpc.BlockNumber) (*state.StateDB, *types.Header, error)
