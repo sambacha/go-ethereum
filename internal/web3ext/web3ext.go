@@ -197,8 +197,8 @@ web3._extend({
 			params: 1
 		}),
 			new web3._extend.Method({
-			name: 'advanceTime',
-			call: 'debug_advanceTime',
+			name: 'increaseTime',
+			call: 'debug_increaseTime',
 			params: 1
 		}),
 		new web3._extend.Method({

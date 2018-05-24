@@ -1454,11 +1454,10 @@ func (api *PrivateDebugAPI) SetHead(number hexutil.Uint64) {
 	api.b.SetHead(uint64(number))
 }
 
-// AdvanceTime advances the time for the clock used in consensus and mining. It
-// has the effect of changing the timestamp of the next mined block.
-func (api *PrivateDebugAPI) AdvanceTime(seconds uint64) (uint64, error) {
-	fmt.Printf("AdvanceTime called: %d\n", seconds)
-	offset, err := aclock.AdvanceTime(time.Duration(seconds) * time.Second)
+// IncreaseTime increase the time offset for the clock used in consensus and
+// mining. It has the effect of changing the timestamp of the next mined block.
+func (api *PrivateDebugAPI) IncreaseTime(seconds uint64) (uint64, error) {
+	offset, err := aclock.AddTimeOffset(time.Duration(seconds) * time.Second)
 	if err != nil {
 		return 0, err
 	}

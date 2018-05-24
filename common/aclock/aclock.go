@@ -7,7 +7,7 @@ import (
 
 var offset time.Duration
 
-func AdvanceTime(d time.Duration) (time.Duration, error) {
+func AddTimeOffset(d time.Duration) (time.Duration, error) {
 	if offset+d < offset {
 		return 0, fmt.Errorf("aclock: offset overflow")
 	}
