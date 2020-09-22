@@ -374,7 +374,31 @@ func (db *Database) meter(refresh time.Duration) {
 			db.diskWriteMeter.Mark(int64((nWrite - iostats[1]) * 1024 * 1024))
 		}
 		iostats[0], iostats[1] = nRead, nWrite
-
+		
+		
+		/**
+func (c *KDBConn) ReadMessage() (data *K, msgtype ReqType, e error)
+		func (c *KDBConn) WriteMessage(msgtype ReqType, data *K) (err error) {
+	return Encode(c.con, msgtype, data)
+}
+		
+			fmt.Printf("key", key)
+	fmt.Printf("value ", common.ToHex(value))
+	stmt, err := db.kdb.Prepare("INSERT INTO leveldbvals VALUES ($1, $2)")
+	if err != nil {
+		db.log.Error("prepare", err)
+	}
+	res, err := stmt.Exec(common.Bytes2Hex(key), common.Bytes2Hex(value))
+	if err != nil {
+		db.log.Error("Error", err)
+	} else {
+		db.log.Info("Stmt", res)
+		db.log.Info("Key", "stringValue")
+		db.log.Info("Value", value)
+	}
+		
+		
+		**/
 		compCount, err := db.db.GetProperty("leveldb.compcount")
 		if err != nil {
 			db.log.Error("Failed to read database iostats", "err", err)
